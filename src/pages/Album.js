@@ -36,11 +36,13 @@ class Album extends Component {
         <h3 data-testid="album-name">{ musicId[0]?.collectionName }</h3>
 
         {
-          sliceAlbumfromMusic.map(({ trackName, previewUrl }) => (
+          sliceAlbumfromMusic.map((music) => (
             <MusicCard
-              key={ trackName }
-              trackName={ trackName }
-              previewUrl={ previewUrl }
+              key={ music.trackNumber }
+              trackName={ music.trackName }
+              previewUrl={ music.previewUrl }
+              trackId={ music.trackId }
+              objMusic={ music }
             />
           ))
         }
