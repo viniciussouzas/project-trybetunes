@@ -58,8 +58,6 @@ class App extends React.Component {
 
     const musicsOfArtist = await searchAlbumsAPI(search);
 
-    console.log(search);
-
     if (musicsOfArtist) {
       this.setState({
         loading: false,

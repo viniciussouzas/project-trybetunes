@@ -42,15 +42,15 @@ class Search extends Component {
 
         {searchMusics.length === 0 ? <span>Nenhum álbum foi encontrado</span>
           : (
-            searchMusics.map((music) => (
-              <div key={ music.collectionId }>
-                <img src={ music.artworkUrl100 } alt={ music.collectionName } />
+            searchMusics.map(({ collectionId, artworkUrl100, collectionName }) => (
+              <div key={ collectionId }>
+                <img src={ artworkUrl100 } alt={ collectionName } />
 
                 <Link
-                  data-testid={ `link-to-album-${music.collectionId}` }
-                  to={ `/album/${music.collectionId}` }
+                  data-testid={ `link-to-album-${collectionId}` }
+                  to={ `/album/${collectionId}` }
                 >
-                  {music.collectionName}
+                  {collectionName}
                 </Link>
               </div>
             ))
