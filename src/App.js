@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
 import Search from './pages/Search';
+import searchAlbumsAPI from './services/searchAlbumsAPI';
 import { createUser } from './services/userAPI';
 
 const MIN_LENGTH_LOGIN = 3;
@@ -16,6 +17,8 @@ class App extends React.Component {
   state = {
     login: '',
     search: '',
+    searchArtist: '',
+    searchMusics: [],
     loading: false,
     redirect: false,
   };
@@ -46,8 +49,29 @@ class App extends React.Component {
     }
   };
 
+  handleSearchAlbums = async () => {
+    const { search } = this.state;
+
+    this.setState({
+      loading: true,
+    });
+
+    const musicsOfArtist = await searchAlbumsAPI(search);
+
+    console.log(search);
+
+    if (musicsOfArtist) {
+      this.setState({
+        loading: false,
+        search: '',
+        searchArtist: search,
+        searchMusics: musicsOfArtist,
+      });
+    }
+  };
+
   render() {
-    const { login, loading, redirect, search } = this.state;
+    const { login, loading, redirect, search, searchArtist, searchMusics } = this.state;
 
     const buttonDisabledLogin = login.length < MIN_LENGTH_LOGIN;
 
@@ -76,7 +100,11 @@ class App extends React.Component {
             render={ (props) => (<Search
               { ...props }
               onInputChange={ this.onInputChange }
+              handleSearchAlbums={ this.handleSearchAlbums }
               search={ search }
+              loading={ loading }
+              searchArtist={ searchArtist }
+              searchMusics={ searchMusics }
               isButtonDisabled={ buttonDisabledSearch }
             />) }
           />
