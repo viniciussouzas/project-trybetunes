@@ -9,11 +9,13 @@ import ProfileEdit from './pages/ProfileEdit';
 import Search from './pages/Search';
 import { createUser } from './services/userAPI';
 
-const MIN_LENGTH = 3;
+const MIN_LENGTH_LOGIN = 3;
+const MIN_LENGTH_SEARCH = 2;
 
 class App extends React.Component {
   state = {
     login: '',
+    search: '',
     loading: false,
     redirect: false,
   };
@@ -45,9 +47,11 @@ class App extends React.Component {
   };
 
   render() {
-    const { login, loading, redirect } = this.state;
+    const { login, loading, redirect, search } = this.state;
 
-    const buttonDisabled = login.length < MIN_LENGTH === true;
+    const buttonDisabledLogin = login.length < MIN_LENGTH_LOGIN;
+
+    const buttonDisabledSearch = search.length < MIN_LENGTH_SEARCH;
 
     return (
       <div>
@@ -63,10 +67,19 @@ class App extends React.Component {
               login={ login }
               loading={ loading }
               redirect={ redirect }
-              isButtonDisabled={ buttonDisabled }
+              isButtonDisabled={ buttonDisabledLogin }
             />) }
           />
-          <Route exact path="/search" component={ Search } />
+          <Route
+            exact
+            path="/search"
+            render={ (props) => (<Search
+              { ...props }
+              onInputChange={ this.onInputChange }
+              search={ search }
+              isButtonDisabled={ buttonDisabledSearch }
+            />) }
+          />
           <Route exact path="/album/:id" component={ Album } />
           <Route exact path="/favorites" component={ Favorites } />
           <Route exact path="/profile" component={ Profile } />
