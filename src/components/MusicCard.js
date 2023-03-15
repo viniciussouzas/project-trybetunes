@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../Loading';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends Component {
   state = {
@@ -27,8 +27,8 @@ class MusicCard extends Component {
       });
     } else {
       this.setState({
-        loading: false,
         favoriteSongs: [],
+        loading: false,
       });
     }
   };
@@ -47,6 +47,22 @@ class MusicCard extends Component {
     this.setState({
       loading: false,
       favoriteSongs: addFavoriteSong,
+    });
+  };
+
+  handleRemoveSong = async (music) => {
+    this.setState({
+      loading: true,
+    });
+
+    const response = await removeSong(music);
+
+    if (response === 'OK') {
+      await this.handleGetFavoriteSongs();
+    }
+
+    this.setState({
+      loading: false,
     });
   };
 
@@ -72,7 +88,8 @@ class MusicCard extends Component {
           type="checkbox"
           name="checkbox"
           checked={ favoriteSongs.some(({ trackId: id }) => id === objMusic.trackId) }
-          onChange={ () => this.handleAddSong(objMusic) }
+          onChange={ ({ target: { checked } }) => (
+            checked ? this.handleAddSong(objMusic) : this.handleRemoveSong(objMusic)) }
           data-testid={ `checkbox-music-${trackId}` }
         />
       </div>
