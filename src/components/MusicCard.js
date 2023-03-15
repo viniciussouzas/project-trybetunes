@@ -68,7 +68,7 @@ class MusicCard extends Component {
 
   render() {
     const { trackName, previewUrl,
-      trackId, objMusic } = this.props;
+      trackId, objMusic, handleUpdate } = this.props;
 
     const { loading, favoriteSongs } = this.state;
 
@@ -84,14 +84,24 @@ class MusicCard extends Component {
           <code>audio</code>
           .
         </audio>
-        <input
-          type="checkbox"
-          name="checkbox"
-          checked={ favoriteSongs.some(({ trackId: id }) => id === objMusic.trackId) }
-          onChange={ ({ target: { checked } }) => (
-            checked ? this.handleAddSong(objMusic) : this.handleRemoveSong(objMusic)) }
-          data-testid={ `checkbox-music-${trackId}` }
-        />
+        <label htmlFor="checkbox">
+          Favorita
+          <input
+            id="checkbox"
+            type="checkbox"
+            name="checkbox"
+            checked={ favoriteSongs.some(({ trackId: id }) => id === objMusic.trackId) }
+            onChange={ ({ target: { checked } }) => {
+              if (checked) {
+                this.handleAddSong(objMusic);
+              } else {
+                this.handleRemoveSong(objMusic);
+                if (handleUpdate) handleUpdate();
+              }
+            } }
+            data-testid={ `checkbox-music-${trackId}` }
+          />
+        </label>
       </div>
     );
   }
@@ -101,7 +111,16 @@ MusicCard.propTypes = {
   trackName: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
   trackId: PropTypes.number.isRequired,
-  objMusic: PropTypes.objectOf(PropTypes.shape({}).isRequired).isRequired,
+  objMusic: PropTypes.objectOf(PropTypes.shape({
+    trackName: PropTypes.string.isRequired,
+    previewUrl: PropTypes.string.isRequired,
+    trackId: PropTypes.number.isRequired,
+  }).isRequired).isRequired,
+  handleUpdate: PropTypes.func,
+};
+
+MusicCard.defaultProps = {
+  handleUpdate: null,
 };
 
 export default MusicCard;
