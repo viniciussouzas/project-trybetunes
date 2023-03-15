@@ -23,7 +23,7 @@ class Header extends Component {
   render() {
     const { userName } = this.state;
 
-    if (userName === '') return <Loading />;
+    if (!userName) return <Loading />;
 
     return (
       <header data-testid="header-component">
