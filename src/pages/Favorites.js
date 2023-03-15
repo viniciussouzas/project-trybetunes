@@ -32,13 +32,11 @@ class Favorites extends Component {
   render() {
     const { favoriteSongs, loading } = this.state;
 
-    if (loading) return <Loading />;
-
     return (
       <div data-testid="page-favorites">
         <Header />
-        {
-          favoriteSongs.map((music) => (
+        { loading ? <Loading />
+          : favoriteSongs.map((music) => (
             <MusicCard
               key={ music.trackNumber }
               trackName={ music.trackName }
@@ -47,8 +45,7 @@ class Favorites extends Component {
               objMusic={ music }
               handleUpdate={ this.handleGetFavoriteSongs }
             />
-          ))
-        }
+          ))}
       </div>
     );
   }

@@ -72,36 +72,42 @@ class MusicCard extends Component {
 
     const { loading, favoriteSongs } = this.state;
 
-    if (loading) return <Loading />;
-
     return (
       <div>
-        <h3>{trackName}</h3>
-        <audio data-testid="audio-component" src={ previewUrl } controls>
-          <track kind="captions" />
-          O seu navegador não suporta o elemento
-          {' '}
-          <code>audio</code>
-          .
-        </audio>
-        <label htmlFor="checkbox">
-          Favorita
-          <input
-            id="checkbox"
-            type="checkbox"
-            name="checkbox"
-            checked={ favoriteSongs.some(({ trackId: id }) => id === objMusic.trackId) }
-            onChange={ ({ target: { checked } }) => {
-              if (checked) {
-                this.handleAddSong(objMusic);
-              } else {
-                this.handleRemoveSong(objMusic);
-                if (handleUpdate) handleUpdate();
-              }
-            } }
-            data-testid={ `checkbox-music-${trackId}` }
-          />
-        </label>
+        {
+          loading ? <Loading />
+            : (
+              <div>
+                <h3>{trackName}</h3>
+                <audio data-testid="audio-component" src={ previewUrl } controls>
+                  <track kind="captions" />
+                  O seu navegador não suporta o elemento
+                  {' '}
+                  <code>audio</code>
+                  .
+                </audio>
+                <label htmlFor="checkbox">
+                  Favorita
+                  <input
+                    id="checkbox"
+                    type="checkbox"
+                    name="checkbox"
+                    checked={ favoriteSongs
+                      .some(({ trackId: id }) => id === objMusic.trackId) }
+                    onChange={ ({ target: { checked } }) => {
+                      if (checked) {
+                        this.handleAddSong(objMusic);
+                      } else {
+                        this.handleRemoveSong(objMusic);
+                        if (handleUpdate) handleUpdate();
+                      }
+                    } }
+                    data-testid={ `checkbox-music-${trackId}` }
+                  />
+                </label>
+              </div>
+            )
+        }
       </div>
     );
   }
